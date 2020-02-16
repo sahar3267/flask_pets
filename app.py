@@ -1,10 +1,13 @@
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 import datetime
+import os
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///pets.sqlite"
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("JAWSDB_URL", "sqlite:///pets.sqlite")
 db = SQLAlchemy(app)
+
+os.getenv("JAWSDB_URL", "sqlite:///pets.sqlite")
 
 class DictMixIn:
     def to_dict(self):
@@ -30,14 +33,7 @@ class Pet(db.Model, DictMixIn):
 @app.before_first_request
 def init_app():
     db.create_all()
-    db.session.add(Pet(date=datetime.datetime.utcnow() - datetime.timedelta(days=7), name="Sample Pet 1", age=12, type="fish", color="green"))
-    db.session.add(Pet(date=datetime.datetime.utcnow() - datetime.timedelta(days=7), name="Sample Pet 2", age=13, type="dog", color="green"))
-    db.session.add(Pet(date=datetime.datetime.utcnow() - datetime.timedelta(days=3), name="Sample Pet 3", age=14, type="cat", color="green"))
-    db.session.add(Pet(date=datetime.datetime.utcnow(), name="felix", age=14, type="cat", color="green"))
-    db.session.add(Pet(date=datetime.datetime.utcnow(), name="felix", age=14, type="dog", color="green"))
-
-
-    db.session.commit()
+    
 
 
 @app.route("/")
