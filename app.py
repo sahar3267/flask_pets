@@ -7,7 +7,7 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("JAWSDB_URL", "sqlite:///pets.sqlite")
 db = SQLAlchemy(app)
 
-os.getenv("JAWSDB_URL", "sqlite:///pets.sqlite")
+
 
 class DictMixIn:
     def to_dict(self):
@@ -25,9 +25,9 @@ class Pet(db.Model, DictMixIn):
     id = db.Column(db.Integer(), primary_key=True)
     date = db.Column(db.Date())
     age = db.Column(db.Integer())
-    name = db.Column(db.String())
-    type = db.Column(db.String())
-    color = db.Column(db.String())
+    name = db.Column(db.String(30))
+    type = db.Column(db.String(30))
+    color = db.Column(db.String(30))
 
 
 @app.before_first_request
